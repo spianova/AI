@@ -1,1 +1,339 @@
+# Zadanie 1.1:
+1) A -- rodzeństwo
+2) B -- kuzyni (ich rodzice to rodzeństwo)
+3) C -- Współdziadkowie (X i Y są rodzicami, którzy mają wspólne wnuki)
+4) D -- Macocha (Y jest nową partnerką ojca X, ale nie jest biologiczną matką X).
+5) E -- Przyrodnie rodzeństwo (X i Y mają jednego wspólnego rodzica)
+6) F -- Szwagier (Y jest małżonkiem rodzeństwa X)
+7) G -- Y jest wujkiem X (bratem jednego z rodziców X), a ponieważ X ma dziecko z partnerem Y, to relacja jest skomplikowana
 
+# Zadanie 1.2:
+1) 
+% Patrycja i Piotr -- rodzice Amelki i Mateusza:
+rodzic(amelka,patrycja).
+rodzic(mateusz,patrycja).
+rodzic(amelka,piotr).
+rodzic(mateusz,piotr).
+
+% Takze mozna zapisać to tak:
+rodzenstwo(X, Y) :-
+    rodzic(X, A),
+    rodzic(Y, A),
+    rodzic(X, B),
+    rodzic(Y, B),
+    X \= Y,
+    A \= X,
+    A \= Y,
+    B \= X,
+    B \= Y,
+    B \= A.
+2) 
+% Piotr to rodzic Amelki i Mateusza, Amelia to rodzic Oli, a Mateusz to rodzic Heleny
+rodzic(amelka,piotr).
+rodzic(mateusz,piotr).
+rodzic(ola,amelka).
+rodzic(helena,mateusz).
+
+% Albo:
+kuzyn(X, Y) :-
+    rodzic(A, C),
+    rodzic(B, C),
+    rodzic(X, A),
+    rodzic(Y, B),
+    A \= X,
+    A \= Y,
+    A \= B,
+    A \= C,
+    B \= X,
+    B \= Y,
+    B \= A,
+    B \= C,
+    C \= A,
+    C \= B,
+    C \= X,
+    C \= Y,
+    X \= Y.
+3) 
+% Piotr to rodzic Amelki, Krystian to rodzic Kuby, Amelka i Kuba to rodzice Ewy
+rodzic(amelka,piotr).
+rodzic(kuba,krystian).
+rodzic(ewa,amelka).
+rodzic(ewa,kuba).
+
+% Albo:
+wspoldziadkowie(X, Y) :-
+    rodzic(A, X),
+    rodzic(B, Y),
+    rodzic(C, A),
+    rodzic(C, B),
+    A \= X,
+    A \= Y,
+    A \= B,
+    A \= C,
+    B \= X,
+    B \= Y,
+    B \= A,
+    B \= C,
+    C \= A,
+    C \= B,
+    C \= X,
+    C \= Y,
+    X \= Y.
+4) 
+% Piotr to rodzic Amelki i Mateusza, Kinga to rodzic tylko Mateusza
+rodzic(amelka,piotr).
+rodzic(mateusz,piotr).
+rodzic(mateusz,kinga).
+
+% Albo:
+macocha(X, Y) :-
+    rodzic(X, A),
+    rodzic(B, A),
+    rodzic(B, Y),
+    \+rodzic(X ,Y),
+    \+rodzic(Y, X),
+    A \= X,
+    A \= Y,
+    A \= B,
+    B \= X,
+    B \= Y,
+    B \= A,
+    X \= Y.
+5) 
+% Patrycja to rodzic Oli, Kinga to rodzic Mateusza, Piotr to rodzic Oli i Mateusza
+rodzic(ola,patrycja).
+rodzic(mateusz,kinga).
+rodzic(ola,piotr).
+rodzic(mateusz,piotr).
+
+% Albo:
+przyrodnie_rodzenstwo(X, Y) :-
+    rodzic(X, A),
+    rodzic(X, B),
+    rodzic(Y, A),
+    rodzic(Y, C),
+    \+rodzic(X, C),
+    \+rodzic(Y, B),
+    A \= X,
+    A \= Y,
+    A \= B,
+    A \= C,
+    B \= X,
+    B \= Y,
+    B \= A,
+    B \= C,
+    C \= A,
+    C \= B,
+    C \= X,
+    C \= Y,
+    X \= Y.
+6) 
+% Piotr i Patrycja to rodzice Oli, Mateusz to rodzic Patrycji i Kuby
+rodzic(ola,piotr).
+rodzic(ola,patrycja).
+rodzic(patrycja,mateusz).
+rodzic(kuba,mateusz).
+
+% Albo:
+szwagier(X, Y) :-
+    (   
+    	(   
+        	rodzic(A, X),
+    		rodzic(A, B),
+    		rodzic(B, C),
+    		rodzic(Y, C),
+    		\+rodzic(A, C),
+    		\+rodzic(C, A),
+    		\+rodzic(X, Y),
+   			\+rodzic(Y, X)
+        );
+    	(
+        	rodzic(A, Y),
+    		rodzic(A, B),
+    		rodzic(B, C),
+    		rodzic(X, C),
+    		\+rodzic(A, C),
+    		\+rodzic(C, A),
+    		\+rodzic(X, Y),
+   			\+rodzic(Y, X)
+        )
+    ),
+    A \= X,
+    A \= Y,
+    A \= B,
+    A \= C,
+    B \= X,
+    B \= Y,
+    B \= A,
+    B \= C,
+    C \= A,
+    C \= B,
+    C \= X,
+    C \= Y,
+    X \= Y.
+
+7) 
+% Piotr to rodzic Mateusza i Kuby, Patrycja to rodzic Mateusza i Oli, Ola to rodzic Kuby
+rodzic(mateusz,piotr).
+rodzic(mateusz,patrycja).
+rodzic(kuba,piotr).
+rodzic(ola,patrycja).
+rodzic(kuba,ola).
+
+% Albo:
+skomplikowana_sytuacja(X, Y) :-
+	rodzic(X, A),
+    rodzic(X, B),
+    rodzic(C, A),
+    rodzic(Y, C),
+    rodzic(Y, B),
+    A \= X,
+    A \= Y,
+    A \= B,
+    A \= C,
+    B \= X,
+    B \= Y,
+    B \= A,
+    B \= C,
+    C \= A,
+    C \= B,
+    C \= X,
+    C \= Y,
+    X \= Y.
+
+# Zadanie 2:
+% 1
+kobieta(X):-
+    osoba(X),
+    \+mezczyzna(X).
+
+% 2 - X jest ojcem Y
+ojciec(X,Y):-
+    osoba(X),
+    osoba(Y),
+    mezczyzna(X),
+    rodzic(Y,X),
+    X \= Y.
+
+% 3 - X jest matką Y
+matka(X,Y):-
+    osoba(X),
+    osoba(Y),
+    kobieta(X),
+    rodzic(Y,X),
+    X \= Y.
+
+% 4 - X jest córką Y
+corka(X,Y):-
+    osoba(X),
+    osoba(Y),
+    kobieta(X),
+    rodzic(X,Y),
+    X \= Y.
+
+% 5 - X jest rodzonym bratem Y
+brat_rodzony(X,Y):-
+    mezczyzna(X),
+    ojciec(A,X),
+    ojciec(A,Y),
+    matka(B,X),
+    matka(B,Y),
+    X \= Y,
+    A \= B,
+    A \= X,
+    A \= Y,
+    B \= X,
+    B \= Y.
+
+% 6 - X jest przyrodnim bratem Y
+brat_przyrodni(X,Y):- 
+    mezczyzna(X),
+    rodzic(X,A),
+    rodzic(Y,A),
+    rodzic(Y,B),
+    \+brat_rodzony(X,Y),
+    X \= Y,
+    A \= B,
+    A \= X,
+    A \= Y,
+	B \= X,
+    B \= Y.
+
+% 7 - X jest kuzynem Y
+kuzyn(X,Y):-
+    mezczyzna(X),
+    rodzic(X,A),
+    rodzic(A,B),
+    rodzic(C,B),
+    rodzic(Y,C),
+    X \= Y,
+	A \= B,
+    A \= C,
+    A \= X,
+	A \= Y,
+    B \= X,
+	B \= Y,
+    B \= C.
+
+% 8 - X jest dziadkiem od strony ojca dla Y
+dziadek_od_strony_ojca(X,Y):-
+    ojciec(A,Y),
+    ojciec(X,A),
+    X \= Y,
+    A \= X,
+	A \= Y.
+
+% 9 - X jest dziadkiem od strony matki dla Y
+dziadek_od_strony_matki(X,Y):-
+    matka(A,Y),
+    ojciec(X,A),
+    X \= Y,
+    A \= X,
+	A \= Y.
+
+% 10 - X jest dziadkiem Y
+dziadek(X,Y):-
+    dziadek_od_strony_ojca(X,Y);
+    dziadek_od_strony_matki(X,Y).
+
+% 11 - X jest babcią Y
+babcia(X,Y):-
+    osoba(Y),
+    rodzic(Y,A),
+    matka(X,A),
+    X \= Y,
+    A \= X,
+	A \= Y.
+
+% 12 - Y jest wnuczką X
+wnuczka(X,Y):-
+    kobieta(Y),
+    (   
+    	dziadek(X,Y);
+    	babcia(X,Y)
+    ).
+
+% 13 - X jest przodkiem Y do drugiego pokolenia wstecz
+przodek_do2pokolenia_wstecz(X,Y):-
+    osoba(X),
+    osoba(Y),
+	(   
+    	rodzic(Y,X);
+    	dziadek(X,Y);
+    	babcia(X,Y)
+    ),
+    X \= Y.
+
+% 14 - X jest przodkiem Y do trzeciego pokolenia wstecz
+przodek_do3pokolenia_wstecz(X,Y):-
+	przodek_do2pokolenia_wstecz(X,Y);
+    (   
+    	rodzic(Y,A),
+        A \= X,
+        A \= Y,
+        X \= Y,
+    	(
+        	dziadek(X,A);
+        	babcia(X,A)
+        )
+    ).
